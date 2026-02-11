@@ -77,7 +77,7 @@ export default function MyVideos() {
             const objectId = obj.data?.objectId || "";
             if (!fields) return null;
 
-            const shareLink = `${window.location.origin}/watch/${fields.blob_id}`;
+            const shareLink = `${window.location.origin}${import.meta.env.BASE_URL}watch/${fields.blob_id}`;
             const date = new Date(Number(fields.created_at)).toLocaleDateString();
 
             return (

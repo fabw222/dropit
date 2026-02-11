@@ -64,7 +64,7 @@ export default function Home() {
 
       await signAndExecute({ transaction: tx });
 
-      const link = `${window.location.origin}/watch/${blobId}`;
+      const link = `${window.location.origin}${import.meta.env.BASE_URL}watch/${blobId}`;
       setShareLink(link);
       setProgress("");
     } catch (err: any) {
