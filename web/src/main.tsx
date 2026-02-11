@@ -23,7 +23,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
     <QueryClientProvider client={queryClient}>
       <SuiClientProvider networks={networkConfig} defaultNetwork="testnet">
         <WalletProvider autoConnect>
-          <BrowserRouter>
+          <BrowserRouter basename="/dropit">
             <App />
           </BrowserRouter>
         </WalletProvider>
