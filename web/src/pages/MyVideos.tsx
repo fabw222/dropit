@@ -1,5 +1,6 @@
 import {
   useCurrentAccount,
+  useSuiClient,
   useSuiClientQuery,
   useSignAndExecuteTransaction,
 } from "@mysten/dapp-kit";
@@ -16,6 +17,7 @@ interface VideoFields {
 
 export default function MyVideos() {
   const account = useCurrentAccount();
+  const suiClient = useSuiClient();
   const { mutateAsync: signAndExecute } = useSignAndExecuteTransaction();
 
   const { data, isPending, refetch } = useSuiClientQuery(
@@ -55,7 +57,8 @@ export default function MyVideos() {
         target: `${PACKAGE_ID}::video::delete_video`,
         arguments: [tx.object(objectId)],
       });
-      await signAndExecute({ transaction: tx });
+      const { digest } = await signAndExecute({ transaction: tx });
+      await suiClient.waitForTransaction({ digest });
       refetch();
     } catch (err: any) {
       alert("Delete failed: " + err.message);

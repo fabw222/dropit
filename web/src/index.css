@@ -219,6 +219,59 @@ a:hover {
   margin-bottom: var(--spacing-xl);
 }
 
+/* Cost Info */
+.cost-info {
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-sm);
+  padding: var(--spacing-md) var(--spacing-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.cost-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.cost-label {
+  color: var(--text-muted);
+  font-size: var(--font-size-sm);
+}
+
+.cost-value {
+  font-family: monospace;
+  font-weight: 600;
+  font-size: var(--font-size-sm);
+}
+
+.cost-value.insufficient {
+  color: var(--color-error);
+}
+
+.cost-loading {
+  color: var(--text-muted);
+  font-style: italic;
+  font-size: var(--font-size-sm);
+  margin: 0;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+.cost-warning {
+  color: var(--color-warning);
+  font-size: var(--font-size-sm);
+  margin: 0;
+}
+
+.cost-error {
+  color: var(--color-error);
+  font-size: var(--font-size-sm);
+  margin: 0;
+  font-weight: 500;
+}
+
 .title-input {
   width: 100%;
   padding: var(--spacing-md) var(--spacing-lg);

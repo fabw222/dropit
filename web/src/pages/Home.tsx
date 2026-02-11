@@ -6,6 +6,10 @@ import {
 import { Transaction } from "@mysten/sui/transactions";
 import { uploadToWalrus } from "../lib/walrus";
 import { PACKAGE_ID } from "../constants";
+import {
+  useWalrusStorageCost,
+  formatWal,
+} from "../hooks/useWalrusStorageCost";
 
 export default function Home() {
   const account = useCurrentAccount();
@@ -19,6 +23,9 @@ export default function Home() {
   const [error, setError] = useState("");
   const [dragOver, setDragOver] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const { totalCost, walBalance, isLoading: costLoading, error: costError, hasSufficientBalance } =
+    useWalrusStorageCost(file?.size ?? null, account?.address ?? null);
 
   const handleFile = (f: File) => {
     setFile(f);
@@ -111,12 +118,42 @@ export default function Home() {
             className="title-input"
           />
 
+          <div className="cost-info">
+              {costLoading ? (
+                <p className="cost-loading">Estimating storage cost...</p>
+              ) : costError ? (
+                <p className="cost-warning">Could not estimate cost</p>
+              ) : totalCost != null ? (
+                <>
+                  <div className="cost-row">
+                    <span className="cost-label">Estimated cost</span>
+                    <span className="cost-value">{formatWal(totalCost)} WAL</span>
+                  </div>
+                  {account && walBalance != null && (
+                    <>
+                      <div className="cost-row">
+                        <span className="cost-label">Your balance</span>
+                        <span className={`cost-value${hasSufficientBalance === false ? " insufficient" : ""}`}>
+                          {formatWal(walBalance)} WAL
+                        </span>
+                      </div>
+                      {hasSufficientBalance === false && (
+                        <p className="cost-error">
+                          Insufficient WAL balance. You need {formatWal(totalCost - walBalance)} more WAL.
+                        </p>
+                      )}
+                    </>
+                  )}
+                </>
+              ) : null}
+          </div>
+
           {!account ? (
             <p className="hint">Connect your wallet to upload</p>
           ) : (
             <button
               onClick={handleUpload}
-              disabled={uploading}
+              disabled={uploading || hasSufficientBalance === false}
               className="upload-btn"
             >
               {uploading ? "Uploading..." : "Upload to Walrus"}
